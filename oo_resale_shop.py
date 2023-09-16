@@ -18,13 +18,17 @@ class ResaleShop():
         self.itemID += 1
         item = Computer(description, processor_type, hard_drive_capacity, memory, operating_system, year_made, price)
         self.inventory.insert(self.itemID, item)
+        return self
 
-    def sell(self, itemID):
-        if self.inventory[itemID]!= "sold" and itemID <= itemID:
-            self.inventory[itemID] = "sold"
-            print = "Computer Sold!"
+    def sell(self, ID):
+        if ID <= self.itemID:
+            if self.inventory[ID]!= "sold":
+                self.inventory[ID] = "sold"
+                print = "Computer Sold!"
+            else:
+                print("Computer ", ID, " not found. Please select another computer to sell.")
         else:
-            print("Computer ", itemID, " not found. Please select another computer to sell.")
+            print("Computer ", ID, " not found. Please select another computer to sell.")
 
     def refurbish(self):
         pass
@@ -34,3 +38,4 @@ test.buy("Mac Pro (Late 2013)",
         "3.5 GHc 6-Core Intel Xeon E5",
         1024, 64,
         "macOS Big Sur", 2013, 1500)
+test.sell(1)
