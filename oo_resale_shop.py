@@ -1,41 +1,65 @@
 from computer import Computer
 from typing import Optional
-
+#Attributes, Constructor, and Buy Method written in partnership with Mattea
+#Creates a Resale Shop
 class ResaleShop():
 
-    # What attributes will it need?
+    # Attributes
     inventory = []
     itemID = 0
 
-    # How will you set up your constructor?
-    # Remember: in python, all constructors have the same name (__init__)
+    # Constructor
     def __init__(self, inventory, itemID):
         self.inventory = inventory
         self.itemID = itemID
 
-    # What methods will you need?
+    # Methods
+
+    #Creates a computer object, buys the computer, and adds it to the inventory
     def buy(self, description, processor_type, hard_drive_capacity, memory, operating_system, year_made, price):
         self.itemID += 1
         item = Computer(description, processor_type, hard_drive_capacity, memory, operating_system, year_made, price)
         self.inventory.insert(self.itemID, item)
-        return self
+        print("New computer bought and added to inventory!\n", item, "\nItem ID:", self.itemID)
 
-    def sell(self, ID):
-        if ID <= self.itemID:
-            if self.inventory[ID]!= "sold":
-                self.inventory[ID] = "sold"
-                print = "Computer Sold!"
+    #Sells a computer based on ID
+    def sell(self, id):
+        if id <= self.itemID:
+            if self.inventory[id-1]!= "sold":
+                computer = self.inventory[id-1]
+                print("Computer Sold! Price:", computer.price)
+                self.inventory[id-1] = "sold"
             else:
-                print("Computer ", ID, " not found. Please select another computer to sell.")
+                print("Computer ", id, " not found. Please select another computer to sell.")
         else:
-            print("Computer ", ID, " not found. Please select another computer to sell.")
+            print("Computer ", id, " not found. Please select another computer to sell.")
 
-    def refurbish(self):
-        pass
+    #Reprices a computer based on its age and optionally updates the operating system
+    def refurbish(self, id, new_os: Optional[str]= None):
+        if id <= self.itemID and self.inventory[id-1]!= "sold":
+            computer = self.inventory[id-1]
+            if computer.year_made < 2000:
+                computer.update_price(0)
+            elif computer.year_made < 2012:
+                computer.update_price(250)
+            elif computer.year_made < 2018:
+                computer.update_price(550)
+            else:
+                computer.update_price(1000)
 
-test = ResaleShop([],0)
-test.buy("Mac Pro (Late 2013)",
+            if new_os is not None:
+                computer.update_os(new_os) 
+        else:
+            print("Item", id, "not found. Please select another item to refurbish.")
+
+#Testing
+def main():
+    store = ResaleShop([],0)
+    store.buy("Mac Pro (Late 2013)",
         "3.5 GHc 6-Core Intel Xeon E5",
         1024, 64,
         "macOS Big Sur", 2013, 1500)
-test.sell(1)
+    store.refurbish(1)
+    store.sell(1)
+
+main()
